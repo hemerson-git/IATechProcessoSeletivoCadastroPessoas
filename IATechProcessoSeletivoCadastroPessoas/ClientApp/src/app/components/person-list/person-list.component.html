@@ -1,0 +1,49 @@
+<table>
+  <thead>
+    <tr class="rounded-t-sm bg-zinc-500">
+      <th class="px-4 py-2">Name</th>
+      <th class="px-4 py-2">CPF</th>
+      <th class="px-4 py-2">Data de Nascimento</th>
+      <th class="px-4 py-2">Telefone</th>
+      <th class="px-4 py-2">Ver Mais</th>
+      <th class="px-4 py-2">Excluir</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr
+      *ngFor="let person of personList$ | async"
+      class="odd:bg-zinc-800 hover:brightness-75 transition-opacity"
+    >
+      <td class="text-center px-4 py-2">
+        {{ person.name }}
+      </td>
+
+      <td class="text-center px-4 py-2">
+        {{ person.cpf }}
+      </td>
+
+      <td class="text-center px-4 py-2">
+        {{
+          person.birth | date : "dd 'de' MMMM, 'de' yyyy" : "+0300" : "pt-BR"
+        }}
+      </td>
+
+      <td class="text-center px-4 py-2">
+        {{ person.phones[0].number }}
+      </td>
+
+      <td class="text-center px-4 py-2">
+        <button class="rounded-sm bg-purple-500 text-white min-w-[50px]">
+          +
+        </button>
+      </td>
+
+      <td class="text-center px-4 py-2">
+        <button class="rounded-sm bg-purple-500 text-white min-w-[50px]">
+          Excluir
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
