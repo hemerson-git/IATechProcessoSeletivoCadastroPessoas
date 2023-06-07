@@ -12,6 +12,8 @@ import { PersonListComponent } from './components/person-list/person-list.compon
 import localePT from '@angular/common/locales/pt';
 import { HeaderComponent } from './components/header/header.component';
 import { EditPersonComponent } from './components/edit-person/edit-person.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { CreatePersonComponent } from './components/create-person/create-person.component';
 
 registerLocaleData(localePT);
 
@@ -20,7 +22,9 @@ registerLocaleData(localePT);
     AppComponent,
     PersonListComponent,
     HeaderComponent,
-    EditPersonComponent
+    EditPersonComponent,
+    ModalComponent,
+    CreatePersonComponent
   ],
   imports: [
     BrowserModule,

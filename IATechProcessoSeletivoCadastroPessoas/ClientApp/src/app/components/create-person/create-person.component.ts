@@ -1,14 +1,13 @@
-import { Component, Input } from '@angular/core';
-import { FormGroup, FormControl, FormArray, FormBuilder } from '@angular/forms'
-import { PersonApiService } from 'src/app/services/person-api.service';
+import { Component } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { IPerson, PersonApiService } from 'src/app/services/person-api.service';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: [ './header.component.scss' ]
+  selector: 'app-create-person',
+  templateUrl: './create-person.component.html',
+  styleUrls: ['./create-person.component.scss']
 })
-export class HeaderComponent  {
-  @Input() title: string = '';
+export class CreatePersonComponent {
   name = '';
   cpf = '';
   birth = '';
@@ -52,5 +51,6 @@ export class HeaderComponent  {
     }
 
     this.personService.createPerson(person).subscribe();
+    location.reload();
   }
 }

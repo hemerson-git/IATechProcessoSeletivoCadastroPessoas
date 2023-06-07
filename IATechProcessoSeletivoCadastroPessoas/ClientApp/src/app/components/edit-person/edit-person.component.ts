@@ -44,5 +44,6 @@ export class EditPersonComponent{
     }
 
     this.personService.updatePerson(person, person.id).subscribe();
+    location.reload();
   }
 }

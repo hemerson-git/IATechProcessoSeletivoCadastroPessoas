@@ -46,7 +46,7 @@ export class PersonListComponent {
       id: person.id,
       editName: person.name,
       editCpf: person.cpf,
-      editBirth: person.birth,
+      editBirth: new Date(person.birth).toISOString().slice(0, 10),
       phones: this.fb.array(phones),
     })
   }
