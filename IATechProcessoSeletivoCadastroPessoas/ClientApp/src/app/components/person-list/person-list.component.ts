@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
 import { IPerson, PersonApiService } from 'src/app/services/person-api.service';
 
 @Component({
@@ -8,13 +7,20 @@ import { IPerson, PersonApiService } from 'src/app/services/person-api.service';
   styleUrls: ['./person-list.component.scss']
 })
 export class PersonListComponent {
-  personList$!: Observable<IPerson[]>;
+  personList$!: IPerson[];
 
   constructor(private service: PersonApiService) {
 
   }
 
   ngOnInit(): void {
-    this.personList$ = this.service.getPersonList();
+    this.service.getPersonList().subscribe(person => this.personList$ = person);
+    // this.deletePerson$ = (id: string) => this.service.deletePerson(id);
+  }
+
+  deletePerson(personId: string) {
+    const hasDeleted = this.service.deletePerson(personId).subscribe();
+    this.personList$ = this.personList$.filter(person => person.id !== personId)
+    console.log(hasDeleted);
   }
 }

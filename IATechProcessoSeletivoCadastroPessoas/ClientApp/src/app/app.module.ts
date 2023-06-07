@@ -10,13 +10,15 @@ import { AppComponent } from './app.component';
 import { PersonApiService } from './services/person-api.service';
 import { PersonListComponent } from './components/person-list/person-list.component';
 import localePT from '@angular/common/locales/pt';
+import { HeaderComponent } from './components/header/header.component';
 
 registerLocaleData(localePT);
 
 @NgModule({
   declarations: [
     AppComponent,
-    PersonListComponent
+    PersonListComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

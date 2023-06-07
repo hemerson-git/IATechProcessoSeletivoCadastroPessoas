@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -12,7 +12,16 @@ export interface IPerson {
   name: string;
   cpf: number;
   birth: Date;
-  phones: IPhone[];
+  phones?: IPhone[];
+}
+
+interface  INewPerson {
+  name: string;
+  cpf: number;
+  birth: Date;
+  phones?: {
+    number: number;
+  };
 }
 
 @Injectable({
@@ -36,8 +45,26 @@ export class PersonApiService {
     return person;
   }
 
-  createPerson(data: any) {
-    const person = this.http.post(`${this.personApiUrl}/Person`, data);
+  createPerson(data: INewPerson) {
+    const {birth, cpf, name} = data;
+    const person = this.http.post<IPerson>(`${this.personApiUrl}/Person`, {
+      birth: birth,
+      cpf,
+      name
+    });
+
+    console.log(data)
+
     return person;
+  }
+
+  updatePerson(data: IPerson, id: string) {
+    const newPerson = this.http.put<IPerson>(`${this.personApiUrl}/Person/${id}`, data);
+    return newPerson;
+  }
+
+  deletePerson(id: string) {
+    const hasDeleted = this.http.delete<boolean>(`${this.personApiUrl}/Person/${id}`);
+    return hasDeleted;
   }
 }
