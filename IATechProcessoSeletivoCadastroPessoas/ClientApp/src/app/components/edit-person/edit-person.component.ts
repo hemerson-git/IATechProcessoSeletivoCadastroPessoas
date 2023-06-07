@@ -9,6 +9,7 @@ import { IPerson, PersonApiService } from 'src/app/services/person-api.service';
 })
 export class EditPersonComponent{
   @Input() editPersonForm!: FormGroup<any>;
+  @Input() personList!: IPerson[];
 
   constructor(private fb:FormBuilder, private personService: PersonApiService) {
   }
@@ -32,6 +33,7 @@ export class EditPersonComponent{
   }
 
   saveEditedPerson() {
+    const modal = document.querySelector('#modal');
     const {editBirth, editName, editCpf, id, phones} = this.editPersonForm.value;
     const person = {
       id,
@@ -41,6 +43,6 @@ export class EditPersonComponent{
       phones,
     }
 
-    this.personService.updatePerson(person, person.id);
+    this.personService.updatePerson(person, person.id).subscribe();
   }
 }

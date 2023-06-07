@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IATechProcessoSeletivoCadastroPessoas.Migrations
 {
-    public partial class RemovePersonFromPhone : Migration
+    public partial class Initial2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace IATechProcessoSeletivoCadastroPessoas.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    CPF = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    CPF = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Birth = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -28,24 +28,30 @@ namespace IATechProcessoSeletivoCadastroPessoas.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    PersonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Number = table.Column<long>(type: "bigint", nullable: false),
+                    PersonId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PersonModelId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Phone", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Phone_People_PersonId",
-                        column: x => x.PersonId,
+                        name: "FK_Phone_People_PersonModelId",
+                        column: x => x.PersonModelId,
                         principalTable: "People",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Phone_PersonId",
+                name: "IX_People_CPF",
+                table: "People",
+                column: "CPF",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Phone_PersonModelId",
                 table: "Phone",
-                column: "PersonId");
+                column: "PersonModelId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

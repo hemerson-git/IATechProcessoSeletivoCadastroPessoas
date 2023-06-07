@@ -21,7 +21,8 @@ namespace IATechProcessoSeletivoCadastroPessoas.Repositories
         }
         public async Task<PersonModel> GetById(Guid id)
         {
-            PersonModel person = await _dbContext.People.FirstOrDefaultAsync(person => person.Id == id);
+            PersonModel person = await _dbContext.People.Include(person => person.Phones).FirstOrDefaultAsync(person => person.Id == id);
+
             if(person == null)
             {
                 throw new Exception($"Person not found!");
@@ -30,6 +31,14 @@ namespace IATechProcessoSeletivoCadastroPessoas.Repositories
         }
         public async Task<PersonModel> CreatePerson(PersonModel person)
         {
+            Guid personId = Guid.NewGuid();
+            person.Id = personId;
+
+            foreach (var phone in person.Phones)
+            {
+                phone.PersonId = personId;
+            }
+
             await _dbContext.People.AddAsync(person);
             await _dbContext.SaveChangesAsync();
             return person;
@@ -37,10 +46,43 @@ namespace IATechProcessoSeletivoCadastroPessoas.Repositories
 
         public async Task<PersonModel> UpdatePerson(PersonModel person, Guid id)
         {
-            PersonModel db_person = await GetById(id);
+            var db_person = await GetById(id);
             if(db_person == null)
             {
                 throw new Exception($"The person with id {id} was not found!");
+            }
+
+            foreach (var phone in person.Phones)
+            {
+                phone.PersonId = db_person.Id;
+            }
+
+            var existingPhoneIds = db_person.Phones.Select(p => p.Id).ToList();
+            var updatedPhoneIds = person.Phones.Select(p => p.Id).ToList();
+
+            var phonesToRemove = db_person.Phones
+                .Where(p => !updatedPhoneIds.Contains(p.Id))
+                .ToList();
+
+            foreach (var phoneToRemove in phonesToRemove)
+            {
+                db_person.Phones.Remove(phoneToRemove);
+                _dbContext.Phone.Remove(phoneToRemove);
+            }
+
+            foreach (var updatedPhone in person.Phones)
+            {
+                var existingPhone = db_person.Phones.FirstOrDefault(p => p.Id == updatedPhone.Id);
+                if (existingPhone != null)
+                {
+                    existingPhone.Number = updatedPhone.Number;
+                }
+                else
+                {
+                    updatedPhone.PersonId = db_person.Id;
+                    db_person.Phones.Add(updatedPhone);
+                    _dbContext.Phone.Add(updatedPhone);
+                }
             }
 
             db_person.Birth = person.Birth;

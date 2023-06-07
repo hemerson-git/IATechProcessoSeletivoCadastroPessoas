@@ -42,11 +42,12 @@ export class HeaderComponent  {
   }
 
   createPerson() {
-    const {birth, name, cpf} = this.phoneForm.value;
+    const {birth, name, cpf, phones} = this.phoneForm.value;
     const person = {
       birth: new Date(birth),
       name,
-      cpf: Number(cpf)
+      cpf: Number(cpf),
+      phones
     }
 
     this.personService.createPerson(person).subscribe();

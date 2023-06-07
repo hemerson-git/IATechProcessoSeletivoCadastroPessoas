@@ -49,26 +49,38 @@ public class PersonController : ControllerBase
     public async Task<ActionResult<PhoneModel>> CreatePersonPhone([FromBody] JsonElement request, Guid id)
     {
         PersonModel person = await _personRepository.GetById(id);
-        PhoneModel phone = new();
-        long number = request.GetProperty("number").GetInt64();
 
-        var options = new JsonSerializerOptions
+        if (request.TryGetProperty("number", out var numberProperty) && numberProperty.ValueKind == JsonValueKind.Number)
         {
-            ReferenceHandler = ReferenceHandler.Preserve
-        };
+            long number = numberProperty.GetInt64();
 
-        phone.Number = number;
-        phone.PersonId = person.Id;
+            PhoneModel phone = new PhoneModel
+            {
+                Number = number
+            };
 
-        string json = JsonSerializer.Serialize(phone, options);
-        PhoneModel newPhone = await _phoneRepository.CreatePhone(phone);
+            person.Phones.Add(phone);
+            await _personRepository.UpdatePerson(person, person.Id);
 
-        return Ok(newPhone);
+            return Ok(phone);
+        }
+        else
+        {
+            return BadRequest("Invalid phone number");
+        }
     }
 
     [HttpPost]
     public async Task<ActionResult<PersonModel>> CreatePerson(PersonModel person)
     {
+        Guid personID = Guid.NewGuid();
+        person.Id = personID;
+
+        if (person.Phones == null)
+        {
+            person.Phones = new List<PhoneModel>();
+        }
+
         PersonModel newPerson = await _personRepository.CreatePerson(person);
         return Ok(newPerson);
     }
@@ -76,8 +88,15 @@ public class PersonController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<PersonModel>> UpdatePerson([FromBody] PersonModel person, Guid id)
     {
-        PersonModel updatedPerson = await _personRepository.UpdatePerson(person, id);
-        return Ok(updatedPerson);
+        try
+        {
+            PersonModel updatedPerson = await _personRepository.UpdatePerson(person, id);
+            return Ok(updatedPerson);
+        } catch(Exception ex)
+        {
+            return NotFound(ex);
+        }
+
     }
 
     [HttpDelete("{id}")]

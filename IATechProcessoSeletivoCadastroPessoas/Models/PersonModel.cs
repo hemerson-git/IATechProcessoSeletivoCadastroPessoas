@@ -9,6 +9,6 @@ namespace IATechProcessoSeletivoCadastroPessoas.Models
         public string Name { get; set; }
         public string CPF { get; set;}
         public DateTime Birth { get; set; }
-        public virtual ICollection<PhoneModel>? Phones { get; set; }
+        public ICollection<PhoneModel> Phones { get; set; } = new List<PhoneModel>();
     }
 }

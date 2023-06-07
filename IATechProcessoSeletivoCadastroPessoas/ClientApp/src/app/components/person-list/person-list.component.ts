@@ -38,7 +38,8 @@ export class PersonListComponent {
 
   setSelectedPerson(person: IPerson) {
     const phones =  person.phones?.map(phone => this.fb.group({
-      number: phone.number
+      number: phone.number,
+      id: phone.id
     })) ?? [];
 
     this.editPersonForm = this.fb.group({

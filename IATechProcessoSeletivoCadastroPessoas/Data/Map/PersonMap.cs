@@ -10,13 +10,12 @@ namespace IATechProcessoSeletivoCadastroPessoas.Data.Map
         {
             builder.HasKey(x => x.Id);
             builder.Property(person => person.Name).IsRequired().HasMaxLength(255);
-            builder.Property(person => person.CPF).IsRequired().HasMaxLength(11);
+            builder.Property(person => person.CPF).IsRequired();
+            builder.HasIndex(person => person.CPF).IsUnique();
             builder.Property(person => person.Birth).IsRequired();
 
             builder.HasMany(person => person.Phones)
-            .WithOne(phone => phone.Person)
-            .HasForeignKey(phone => phone.PersonId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .WithOne();
         }
     }
 }

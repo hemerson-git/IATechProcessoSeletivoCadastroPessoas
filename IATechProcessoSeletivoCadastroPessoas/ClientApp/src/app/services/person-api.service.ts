@@ -46,11 +46,14 @@ export class PersonApiService {
   }
 
   createPerson(data: INewPerson) {
-    const {birth, cpf, name} = data;
+    const {birth, cpf, name, phones} = data;
+
+    // console.log(data)
     const person = this.http.post<IPerson>(`${this.personApiUrl}/Person`, {
       birth: birth,
       cpf,
-      name
+      name,
+      phones
     });
 
     return person;

@@ -33,8 +33,7 @@ namespace IATechProcessoSeletivoCadastroPessoas.Migrations
 
                     b.Property<string>("CPF")
                         .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -42,6 +41,9 @@ namespace IATechProcessoSeletivoCadastroPessoas.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CPF")
+                        .IsUnique();
 
                     b.ToTable("People");
                 });
@@ -56,25 +58,23 @@ namespace IATechProcessoSeletivoCadastroPessoas.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<Guid?>("PersonId")
-                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PersonModelId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonId");
+                    b.HasIndex("PersonModelId");
 
                     b.ToTable("Phone");
                 });
 
             modelBuilder.Entity("IATechProcessoSeletivoCadastroPessoas.Models.PhoneModel", b =>
                 {
-                    b.HasOne("IATechProcessoSeletivoCadastroPessoas.Models.PersonModel", "Person")
+                    b.HasOne("IATechProcessoSeletivoCadastroPessoas.Models.PersonModel", null)
                         .WithMany("Phones")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
+                        .HasForeignKey("PersonModelId");
                 });
 
             modelBuilder.Entity("IATechProcessoSeletivoCadastroPessoas.Models.PersonModel", b =>
