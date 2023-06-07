@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { IPerson, PersonApiService } from 'src/app/services/person-api.service';
 
 @Component({
@@ -8,9 +9,16 @@ import { IPerson, PersonApiService } from 'src/app/services/person-api.service';
 })
 export class PersonListComponent {
   personList$!: IPerson[];
+  selectedPerson!: IPerson;
+  editPersonForm!: FormGroup;
 
-  constructor(private service: PersonApiService) {
-
+  constructor(private service: PersonApiService, private fb:FormBuilder) {
+    this.editPersonForm = this.fb.group({
+      editName: this?.selectedPerson?.name ?? 'test',
+      editCpf: '',
+      editBirth: "",
+      phones: this.fb.array([]),
+    });
   }
 
   ngOnInit(): void {
@@ -22,5 +30,23 @@ export class PersonListComponent {
     const hasDeleted = this.service.deletePerson(personId).subscribe();
     this.personList$ = this.personList$.filter(person => person.id !== personId)
     console.log(hasDeleted);
+  }
+
+  phones() : FormArray {
+    return this.editPersonForm.get("phones") as FormArray
+  }
+
+  setSelectedPerson(person: IPerson) {
+    const phones =  person.phones?.map(phone => this.fb.group({
+      number: phone.number
+    })) ?? [];
+
+    this.editPersonForm = this.fb.group({
+      id: person.id,
+      editName: person.name,
+      editCpf: person.cpf,
+      editBirth: person.birth,
+      phones: this.fb.array(phones),
+    })
   }
 }

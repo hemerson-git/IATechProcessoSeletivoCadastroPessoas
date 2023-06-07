@@ -42,8 +42,14 @@
         -
       </td>
       <td class="text-center px-4 py-2">
-        <button class="rounded-sm bg-purple-500 text-white min-w-[50px] mr-2">
-          +
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#editPersonModel"
+          (click)="setSelectedPerson(person)"
+        >
+          Visualizar
         </button>
 
         <button
@@ -56,3 +62,4 @@
     </tr>
   </tbody>
 </table>
+<app-edit-person [editPersonForm]="editPersonForm"></app-edit-person>

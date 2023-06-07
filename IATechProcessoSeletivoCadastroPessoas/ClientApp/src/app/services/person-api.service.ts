@@ -53,13 +53,19 @@ export class PersonApiService {
       name
     });
 
-    console.log(data)
-
     return person;
   }
 
   updatePerson(data: IPerson, id: string) {
-    const newPerson = this.http.put<IPerson>(`${this.personApiUrl}/Person/${id}`, data);
+    const sendingData = {
+      id,
+      name: data.name,
+      cpf: data.cpf,
+      birth: data.birth,
+      phones: data.phones,
+    }
+
+    const newPerson = this.http.put<IPerson>(`${this.personApiUrl}/Person/${id}`, sendingData);
     return newPerson;
   }
 

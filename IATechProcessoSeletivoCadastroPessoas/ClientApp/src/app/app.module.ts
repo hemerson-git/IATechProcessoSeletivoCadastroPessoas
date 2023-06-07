@@ -11,6 +11,7 @@ import { PersonApiService } from './services/person-api.service';
 import { PersonListComponent } from './components/person-list/person-list.component';
 import localePT from '@angular/common/locales/pt';
 import { HeaderComponent } from './components/header/header.component';
+import { EditPersonComponent } from './components/edit-person/edit-person.component';
 
 registerLocaleData(localePT);
 
@@ -18,7 +19,8 @@ registerLocaleData(localePT);
   declarations: [
     AppComponent,
     PersonListComponent,
-    HeaderComponent
+    HeaderComponent,
+    EditPersonComponent
   ],
   imports: [
     BrowserModule,
