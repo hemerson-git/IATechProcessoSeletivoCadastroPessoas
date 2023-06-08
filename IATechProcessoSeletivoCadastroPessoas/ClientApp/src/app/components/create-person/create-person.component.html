@@ -56,6 +56,7 @@
                   formControlName="cpf"
                   class="form-control"
                   placeholder="informe o CPF"
+                  [inputMask]="cpfInputMask"
                 />
               </div>
 
@@ -93,7 +94,9 @@
                         type="text"
                         formControlName="number"
                         class="flex-1 form-control"
-                        placeholder="11988776655"
+                        placeholder="(11) 98877-6655"
+                        [inputMask]="phoneMask"
+                        required
                       />
 
                       <button

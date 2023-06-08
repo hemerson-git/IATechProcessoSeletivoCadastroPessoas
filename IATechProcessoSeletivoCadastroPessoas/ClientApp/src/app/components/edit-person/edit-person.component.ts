@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { createMask } from '@ngneat/input-mask';
 import { IPerson, PersonApiService } from 'src/app/services/person-api.service';
 
 @Component({
@@ -10,6 +11,22 @@ import { IPerson, PersonApiService } from 'src/app/services/person-api.service';
 export class EditPersonComponent{
   @Input() editPersonForm!: FormGroup<any>;
   @Input() personList!: IPerson[];
+  cpfInputMask = createMask({
+    alias: '999.999.999-99',
+    inputFormat: '999.999.999-99',
+    parser: (value: string) => {
+      const parsedValue = value.replaceAll('.', '').replaceAll('-', '');
+      return parsedValue;
+    }
+  })
+  phoneMask = createMask({
+    alias: '(99) 99999-9999',
+    nullable: false,
+    parser: (value: string) => {
+      const parsedValue = value.replaceAll(' ', '').replaceAll('-', '').replace('(', '').replace(')', '');
+      return Number(parsedValue);
+    }
+  })
 
   constructor(private fb:FormBuilder, private personService: PersonApiService) {
   }

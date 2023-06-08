@@ -14,6 +14,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { EditPersonComponent } from './components/edit-person/edit-person.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { CreatePersonComponent } from './components/create-person/create-person.component';
+import { InputMaskModule } from '@ngneat/input-mask';
 
 registerLocaleData(localePT);
 
@@ -31,7 +32,8 @@ registerLocaleData(localePT);
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputMaskModule
   ],
   providers: [PersonApiService],
   bootstrap: [AppComponent]
