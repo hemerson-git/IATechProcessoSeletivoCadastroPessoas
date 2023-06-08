@@ -41,9 +41,15 @@
                   id="name"
                   name="name"
                   formControlName="name"
-                  class="form-control"
+                  class="form-control border-2"
                   placeholder="Informe o nome da pessoa"
                   required
+                  [ngClass]="{
+                    '!border-red-600 !text-red-500':
+                      !phoneForm.value.name.length,
+                      '!border-green-600 !text-green-500':
+                      phoneForm.value.name.length,
+                  }"
                 />
               </div>
 
@@ -54,9 +60,15 @@
                   id="cpf"
                   name="cpf"
                   formControlName="cpf"
-                  class="form-control"
+                  class="form-control border-2"
                   placeholder="informe o CPF"
                   [inputMask]="cpfInputMask"
+                  [ngClass]="{
+                    '!border-red-600 !text-red-500':
+                      phoneForm.value.cpf.replaceAll('_', '').length < 11,
+                    '!text-green-500':
+                      phoneForm.value.cpf.replaceAll('_', '').length === 11
+                  }"
                 />
               </div>
 
@@ -93,10 +105,16 @@
                       <input
                         type="text"
                         formControlName="number"
-                        class="flex-1 form-control"
+                        class="flex-1 form-control border-2"
                         placeholder="(11) 98877-6655"
                         [inputMask]="phoneMask"
                         required
+                        [ngClass]="{
+                          '!border-red-600 !text-red-500':
+                            phoneForm.value.phones[i].number.toString().length < 11,
+                            '!border-green-600 !text-green-500':
+                            phoneForm.value.phones[i].number.toString().length === 11,
+                        }"
                       />
 
                       <button

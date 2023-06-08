@@ -30,9 +30,15 @@
                   id="editName"
                   name="editName"
                   formControlName="editName"
-                  class="form-control"
+                  class="form-control border-2"
                   placeholder="Informe o nome da pessoa"
                   required
+                  [ngClass]="{
+                    '!border-red-600 !text-red-500':
+                      !editPersonForm.value.editName.length,
+                      '!border-green-600 !text-green-500':
+                      editPersonForm.value.editName.length,
+                  }"
                 />
               </div>
 
@@ -43,10 +49,18 @@
                   id="cpf"
                   name="editCpf"
                   formControlName="editCpf"
-                  class="form-control"
+                  class="form-control border-2"
                   placeholder="informe o CPF"
                   [inputMask]="cpfInputMask"
                   required
+                  [ngClass]="{
+                    '!border-red-600 !text-red-500':
+                      editPersonForm.value.editCpf.replaceAll('_', '').length <
+                      11,
+                    '!text-green-500':
+                      editPersonForm.value.editCpf.replaceAll('_', '')
+                        .length === 11
+                  }"
                 />
               </div>
 
@@ -74,6 +88,7 @@
                     Adicionar
                   </button>
                 </div>
+
                 <div
                   *ngFor="let phone of phones().controls; let i = index"
                   [formGroupName]="i"
@@ -87,6 +102,12 @@
                         class="flex-1 form-control"
                         placeholder="(11) 98877-6655"
                         [inputMask]="phoneMask"
+                        [ngClass]="{
+                          '!border-red-600 !text-red-500':
+                            editPersonForm.value.phones[i].number.toString().length < 11,
+                            '!border-green-600 !text-green-500':
+                            editPersonForm.value.phones[i].number.toString().length === 11,
+                        }"
                       />
 
                       <button

@@ -1,7 +1,7 @@
 import { Component, NgModule } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { InputMaskConfig, createMask } from '@ngneat/input-mask';
-import { IPerson, PersonApiService } from 'src/app/services/person-api.service';
+import { IPerson, IPhone, PersonApiService } from 'src/app/services/person-api.service';
 
 @Component({
   selector: 'app-create-person',
@@ -60,6 +60,18 @@ export class CreatePersonComponent {
 
   createPerson() {
     const {birth, name, cpf, phones} = this.phoneForm.value;
+    if (!name || !birth || !cpf) return;
+    let isPhoneValid = true;
+
+    phones.forEach((phone: IPhone) => {
+      if(String(phone.number).length < 11) {
+        isPhoneValid = false;
+        return;
+      };
+    })
+
+    if(!isPhoneValid) return;
+
     const person = {
       birth: new Date(birth),
       name,

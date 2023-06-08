@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { createMask } from '@ngneat/input-mask';
-import { IPerson, PersonApiService } from 'src/app/services/person-api.service';
+import { IPerson, IPhone, PersonApiService } from 'src/app/services/person-api.service';
 
 @Component({
   selector: 'app-edit-person',
@@ -52,6 +52,17 @@ export class EditPersonComponent{
   saveEditedPerson() {
     const modal = document.querySelector('#modal');
     const {editBirth, editName, editCpf, id, phones} = this.editPersonForm.value;
+
+    if(!id || !editName || !editBirth) return;
+    let isPhoneValid = true;
+
+    phones?.forEach((phone:IPhone) => {
+      if(!phone.number) isPhoneValid = false;
+      return;
+    })
+
+    if(!isPhoneValid) return;
+
     const person = {
       id,
       birth: new Date(editBirth),
