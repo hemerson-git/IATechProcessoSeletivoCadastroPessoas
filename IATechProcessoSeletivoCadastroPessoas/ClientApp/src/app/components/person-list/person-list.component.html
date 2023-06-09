@@ -51,22 +51,26 @@
           -
         </td>
         <td class="text-center px-4 py-2">
-          <button
-            type="button"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#editPersonModel"
-            (click)="setSelectedPerson(person)"
-          >
-            Visualizar
-          </button>
+          <div class="flex">
+            <button
+              type="button"
+              class="btn btn-primary flex gap-1 items-center justify-center"
+              data-bs-toggle="modal"
+              data-bs-target="#editPersonModel"
+              (click)="setSelectedPerson(person)"
+            >
+              <i-feather name="eye" class="!h-4 !w-4"></i-feather>
+              <span class="hidden md:inline"> Visualizar </span>
+            </button>
 
-          <button
-            class="btn bg-purple-500 text-white ml-2 min-w-[50px]"
-            (click)="deletePerson(person.id)"
-          >
-            Excluir
-          </button>
+            <button
+              class="btn bg-purple-500 text-white ml-2 flex items-center justify-center"
+              (click)="deletePerson(person.id)"
+            >
+              <i-feather name="trash" class="!h-4 !w-4"></i-feather>
+              <span class="hidden md:inline"> Excluir </span>
+            </button>
+          </div>
         </td>
       </tr>
     </tbody>
