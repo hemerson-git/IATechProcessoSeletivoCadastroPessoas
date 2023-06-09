@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 namespace IATechProcessoSeletivoCadastroPessoas.Controllers;
     [ApiController]
@@ -21,8 +22,14 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<PersonModel>>> GetAllPeople()
+    public async Task<ActionResult<List<PersonModel>>> GetAllPeople([FromQuery] string ?name)
     {
+        if(!string.IsNullOrWhiteSpace(name))
+        {
+            List<PersonModel> matchedPeople = await _personRepository.GetPeopleByName(name);
+            return Ok(matchedPeople);
+        }
+
         List<PersonModel> people = await _personRepository.GetAll();
         return Ok(people);
     }
@@ -32,42 +39,6 @@ public class PersonController : ControllerBase
     {
         PersonModel person = await _personRepository.GetById(id);
         return Ok(person);
-    }
-    [HttpGet("{id}/phones")]
-    public async Task<ActionResult<List<PhoneModel>>> GetPersonPhone(Guid id)
-    {
-        PersonModel person = await _personRepository.GetById(id);
-
-        if(person.Phones == null) {
-            return Ok();
-        }
-
-        List<PhoneModel> phones = person.Phones.ToList();
-        return Ok(phones);
-    }
-    [HttpPost("{id}/phones")]
-    public async Task<ActionResult<PhoneModel>> CreatePersonPhone([FromBody] JsonElement request, Guid id)
-    {
-        PersonModel person = await _personRepository.GetById(id);
-
-        if (request.TryGetProperty("number", out var numberProperty) && numberProperty.ValueKind == JsonValueKind.Number)
-        {
-            long number = numberProperty.GetInt64();
-
-            PhoneModel phone = new PhoneModel
-            {
-                Number = number
-            };
-
-            person.Phones.Add(phone);
-            await _personRepository.UpdatePerson(person, person.Id);
-
-            return Ok(phone);
-        }
-        else
-        {
-            return BadRequest("Invalid phone number");
-        }
     }
 
     [HttpPost]

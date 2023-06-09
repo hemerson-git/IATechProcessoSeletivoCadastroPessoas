@@ -11,6 +11,7 @@ export class PersonListComponent {
   personList$!: IPerson[];
   selectedPerson!: IPerson;
   editPersonForm!: FormGroup;
+  searchQuery: string = '';
 
   constructor(private service: PersonApiService, private fb:FormBuilder) {
     this.editPersonForm = this.fb.group({
@@ -49,5 +50,21 @@ export class PersonListComponent {
       editBirth: new Date(person.birth).toISOString().slice(0, 10),
       phones: this.fb.array(phones),
     })
+  }
+
+  onChange(name: string) {
+    if(name.length > 2) {
+      console.log(name)
+      this.service.getPersonByName(name).subscribe((person: IPerson[]) => {
+        console.log(person)
+        this.personList$ = person;
+      });
+
+      return;
+    }
+
+    this.service.getPersonList().subscribe((person: IPerson[]) => {
+      return this.personList$ = person;
+    });
   }
 }

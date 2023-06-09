@@ -76,4 +76,9 @@ export class PersonApiService {
     const hasDeleted = this.http.delete<boolean>(`${this.personApiUrl}/Person/${id}`);
     return hasDeleted;
   }
+
+  getPersonByName(name: string) {
+    const people = this.http.get<IPerson[]>(`${this.personApiUrl}/Person?name=${name}`);
+    return people;
+  }
 }

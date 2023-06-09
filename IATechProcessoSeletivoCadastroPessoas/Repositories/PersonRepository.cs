@@ -109,5 +109,16 @@ namespace IATechProcessoSeletivoCadastroPessoas.Repositories
 
             return true;
         }
+
+        public async Task<List<PersonModel>> GetPeopleByName(string name)
+        {
+            List<PersonModel> people = await _dbContext.People.Where(person => person.Name.Contains(name)).Include(person => person.Phones).ToListAsync();
+            if(people == null)
+            {
+                throw new Exception($"There are no person Matching this name");
+            }
+
+            return people;
+        }
     }
 }

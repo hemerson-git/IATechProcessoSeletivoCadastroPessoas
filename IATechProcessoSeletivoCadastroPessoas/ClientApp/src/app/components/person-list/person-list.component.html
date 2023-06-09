@@ -1,67 +1,77 @@
-<table class="table table-dark table-striped">
-  <thead>
-    <tr class="rounded-t-sm bg-zinc-500">
-      <th class="px-4 py-2">Name</th>
-      <th class="px-4 py-2">CPF</th>
-      <th class="px-4 py-2">Data de Nascimento</th>
-      <th class="px-4 py-2">Telefone</th>
-      <th class="px-4 py-2 text-center">Ações</th>
-    </tr>
-  </thead>
+<input
+  type="text"
+  [(ngModel)]="searchQuery"
+  placeholder="Buscar por nome"
+  class="form-control"
+  (ngModelChange)="onChange(searchQuery)"
+/>
 
-  <tbody>
-    <tr
-      *ngFor="let person of personList$"
-      class="odd:bg-zinc-800 hover:brightness-75 transition-opacity"
-    >
-      <td class="text-center px-4 py-2">
-        {{ person.name }}
-      </td>
+<section class="overflow-auto">
+  <table class="table table-dark table-striped w-full">
+    <thead>
+      <tr class="rounded-t-sm bg-zinc-500 text-center">
+        <th class="px-4 py-2">Name</th>
+        <th class="px-4 py-2">CPF</th>
+        <th class="px-4 py-2">Data de Nascimento</th>
+        <th class="px-4 py-2">Telefone</th>
+        <th class="px-4 py-2">Ações</th>
+      </tr>
+    </thead>
 
-      <td class="text-center px-4 py-2">
-        {{ person.cpf }}
-      </td>
-
-      <td class="text-center px-4 py-2">
-        {{
-          person.birth | date : "dd 'de' MMMM, 'de' yyyy" : "+0300" : "pt-BR"
-        }}
-      </td>
-
-      <td
-        class="text-center px-4 py-2"
-        *ngIf="person.phones && person.phones.length > 0"
+    <tbody>
+      <tr
+        *ngFor="let person of personList$"
+        class="odd:bg-zinc-800 hover:brightness-75 transition-opacity"
       >
-        {{ person.phones[0].number || "-" }}
-      </td>
+        <td class="text-center px-4 py-2">
+          {{ person.name }}
+        </td>
 
-      <td
-        class="text-center px-4 py-2"
-        *ngIf="person.phones && person.phones.length === 0"
-      >
-        -
-      </td>
-      <td class="text-center px-4 py-2">
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#editPersonModel"
-          (click)="setSelectedPerson(person)"
-        >
-          Visualizar
-        </button>
+        <td class="text-center px-4 py-2">
+          {{ person.cpf }}
+        </td>
 
-        <button
-          class="btn bg-purple-500 text-white ml-2 min-w-[50px]"
-          (click)="deletePerson(person.id)"
+        <td class="text-center px-4 py-2">
+          {{
+            person.birth | date : "dd 'de' MMMM, 'de' yyyy" : "+0300" : "pt-BR"
+          }}
+        </td>
+
+        <td
+          class="text-center px-4 py-2"
+          *ngIf="person.phones && person.phones.length > 0"
         >
-          Excluir
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+          {{ person.phones[0].number || "-" }}
+        </td>
+
+        <td
+          class="text-center px-4 py-2"
+          *ngIf="person.phones && person.phones.length === 0"
+        >
+          -
+        </td>
+        <td class="text-center px-4 py-2">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#editPersonModel"
+            (click)="setSelectedPerson(person)"
+          >
+            Visualizar
+          </button>
+
+          <button
+            class="btn bg-purple-500 text-white ml-2 min-w-[50px]"
+            (click)="deletePerson(person.id)"
+          >
+            Excluir
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 <app-edit-person
   [editPersonForm]="editPersonForm"
   [personList]="personList$"
